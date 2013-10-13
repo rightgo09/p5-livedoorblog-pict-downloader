@@ -42,8 +42,8 @@ mkdir $dir or die $!;
 print "Save directory: ".encode_utf8($dir)."\n";
 
 my @picture_links;
-push(@picture_links, $1) while $content =~ /<a.*?href="(.*?\.(jpe?g|gif|png))".*?>\s*<img.*?class="pict".*?>\s*<\/a>/g;
-push(@picture_links, $1) while $content =~ /<img.*?src="(.*?[^-s]{2}\.(jpe?g|gif|png))".*?class="pict".*?>/g;
+push(@picture_links, $1) while $content =~ /<a.*?href="(.*?\.(jpe?g|gif|png))".*?>\s*<img.*?class="((\w+)\s)?pict".*?>\s*<\/a>/g;
+push(@picture_links, $1) while $content =~ /<img.*?src="(.*?[^-s]{2}\.(jpe?g|gif|png))".*?class="((\w+)\s)?pict".*?>/g;
 
 for my $link (@picture_links) {
   sleep 1;
