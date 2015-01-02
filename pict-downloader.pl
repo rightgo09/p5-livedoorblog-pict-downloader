@@ -26,10 +26,19 @@ $furl->env_proxy() if $ENV{HTTP_PROXY};
 
 my $res = $furl->get($url);
 die $res->status_line unless $res->is_success;
-my $content = decode_utf8($res->content);
+my $content = $res->content;
+if ($res->content_type =~ /charset=((\w|-)+)/) {
+  my $charset = $1;
+  if ($charset =~ /^utf.*8$/i) {
+    $content = decode_utf8($content);
+  }
+  else {
+    Encode::from_to($content, $charset, "utf-8");
+  }
+}
 
 (my $title = $content) =~ s!^.*<title>(.*?)</title>.*$!$1!ms;
-$title = encode_utf8($title);
+$title = encode_utf8($title) if utf8::is_utf8($title);
 
 print "Title: $title\n";
 
